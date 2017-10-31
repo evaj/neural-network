@@ -6,7 +6,7 @@ import javax.imageio.ImageIO
  * Created by Dell on 2017-10-26.
  */
 
-var dir = "C:\\Users\\Dell\\Downloads\\cyfry_zima_17-18\\cyfry_zima_17-18"
+var dir = "/home/piotr/Workspace/MachineLearning/NeuralNetworks/29_10_18_cyfry_zima_17-18_ostateczny_zbior"
 
 var sampleNumber = 0
 

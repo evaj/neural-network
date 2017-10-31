@@ -12,6 +12,7 @@ public class SigmoidNeuron extends Neuron {
     }
 
     public double activationDerivative(){
-        return Activation.sigmoidDerivative(this.getOutput());
+        double net = net();
+        return Activation.sigmoidDerivative(net);
     }
 }

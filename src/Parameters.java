@@ -7,7 +7,7 @@ public class Parameters {
 
     static double upperBound = 0.1;
     static double lowerBound = -0.1;
-    static double learningRate = 0.01;
+    static double learningRate = 0.5;
 
     public static Vector initWeights(int size){
         Random r = new Random();

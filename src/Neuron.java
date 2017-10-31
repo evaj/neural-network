@@ -8,17 +8,18 @@ abstract class Neuron {
     private Vector inputs;
     private double output;
 
-    public Neuron(){
+    public Neuron() {
         bias = 0.0;
         output = 0.0;
     }
 
-    public void updateWeightsAndBias(double error){
-        bias -= Parameters.learningRate*error;
-        weights = MatrixOperationKt.operate(Parameters.learningRate*error, inputs.elementwiseMultiply(weights),
-                MatrixOperationKt.getSubtract()).transpose().getRow(0);}
+    public void updateWeightsAndBias(double error) {
+        bias -= Parameters.learningRate * error;
+        Vector row = MatrixOperationKt.operate(Parameters.learningRate * error, inputs.elementwiseMultiply(weights), MatrixOperationKt.getMultiply()).transpose().getRow(0);
+        weights = weights.subtract(row).transpose().getRow(0);
+    }
 
-    public Neuron(int numberOfInputs){
+    public Neuron(int numberOfInputs) {
         this();
         inputs = new Vector(numberOfInputs);
         weights = Parameters.initWeights(numberOfInputs);
@@ -29,7 +30,7 @@ abstract class Neuron {
         this.bias = bias;
     }
 
-    public double calculateOutput(){
+    public double calculateOutput() {
         return this.output = calculateActivation(net(), 0);
     }
 
@@ -37,7 +38,7 @@ abstract class Neuron {
 
     abstract double calculateActivation(double value, double threshold);
 
-    private double net(){
+    protected double net() {
         return weights.transpose().multiply(this.inputs).getSingleValue() + this.bias;
     }
 
@@ -57,13 +58,13 @@ abstract class Neuron {
         this.bias = bias;
     }
 
-    public boolean equals(Neuron perceptron){
-        if(perceptron.getWeights().getRows() != getWeights().getRows()
+    public boolean equals(Neuron perceptron) {
+        if (perceptron.getWeights().getRows() != getWeights().getRows()
                 || perceptron.getWeights().columns != perceptron.getWeights().columns)
             return false;
-        for(int i = 0; i < weights.getRows(); i++){
-            for(int j = 0; j < weights.columns ; j++){
-                if(getWeights().getElem(i,j) == perceptron.getWeights().getElem(i, j))
+        for (int i = 0; i < weights.getRows(); i++) {
+            for (int j = 0; j < weights.columns; j++) {
+                if (getWeights().getElem(i, j) == perceptron.getWeights().getElem(i, j))
                     return false;
             }
         }

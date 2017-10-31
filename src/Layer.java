@@ -38,10 +38,13 @@ public class Layer {
     public Vector calculateErrors(Matrix nextLayerWeights, Vector errors){
         Vector weightedErrors = nextLayerWeights.transpose().multiply(errors).transpose().getRow(0);
         Vector derivatives = new Vector(numberOfNeurons);
+
         for(int i = 0; i < numberOfNeurons ; i++){
             derivatives.setElem(i, neurons.get(i).activationDerivative());
         }
+
         Vector layerErrors = weightedErrors.elementwiseMultiply(derivatives).transpose().getRow(0);
+
         for(int i = 0; i < numberOfNeurons; i++){
             neurons.get(i).updateWeightsAndBias(layerErrors.getElem(i));
         }
