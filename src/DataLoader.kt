@@ -29,10 +29,10 @@ fun loadData(): Matrix {
             var image = ImageIO.read(it)
             if (image.height == 10 && image.width == 7) {
                 var sample = DoubleArray(image.height * image.width)
-                for (x in 0..image.width-1) {
-                    for (y in 0..image.height-1) {
-                        var index = (x * image.height) + y
-                        sample[index] = if (image.getRGB(x, y) == Color.BLACK.rgb) 1.0 else 0.0
+                for (x in 0..image.height-1) {
+                    for (y in 0..image.width-1) {
+                        var index = (x * image.width) + y
+                        sample[index] = if (image.getRGB(y, x) == Color.BLACK.rgb) 1.0 else 0.0
                     }
                 }
                 finalResult.setElem(counter++, sample)

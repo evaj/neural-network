@@ -22,6 +22,10 @@ public class Vector extends Matrix {
         IntStream.range(0, values.length).forEach( index -> this.values[index] = new double [] {values[index]});
     }
 
+    public Vector(Vector other){
+        this(other.toArray());
+    }
+
     public double getElem(int x) {
         return values[x][0];
     }

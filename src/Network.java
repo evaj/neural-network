@@ -10,19 +10,9 @@ public class Network {
     private int numberOfLayers;
     private Vector expectedValue;
 
-    public Network(Vector inputs, List<Layer> layers) {
-        this.inputs = inputs;
+    public Network(List<Layer> layers) {
         this.layers = layers;
         this.numberOfLayers = layers.size();
-    }
-
-    public Network(Vector inputs, List<Layer> layers, Vector expectedValue) {
-        this.inputs = inputs;
-        this.layers = layers;
-        this.numberOfLayers = layers.size();
-        this.expectedValue = expectedValue;
-        if (layers.get(numberOfLayers - 1).numberOfNeurons != expectedValue.rows)
-            throw new IllegalArgumentException("Number of neurons in last layer should match number of expected outputs!");
     }
 
     public void forwardPropagation() {
@@ -32,44 +22,40 @@ public class Network {
         }
     }
 
-    public double backwardPropagation() {
+    public void backwardPropagation(){
         Layer lastLayer = layers.get(numberOfLayers - 1);
         Vector lastLayerErrors = new Vector(layers.get(numberOfLayers - 1).getNumberOfNeurons());
+
+        Vector [] layerErrors = new Vector[numberOfLayers];
+
+        if(lastLayerErrors.rows != expectedValue.rows)
+            System.out.println("Number of neurons on last layer should match number of expected values!");
 
         for (int i = 0; i < lastLayer.getNumberOfNeurons(); i++) {
             Neuron neuron = lastLayer.getNeurons().get(i);
             lastLayerErrors.setElem(i, Error.meanSquareDerivativeToOutput(expectedValue.getElem(i), neuron.getOutput()) * neuron.activationDerivative());
         }
+        layerErrors[numberOfLayers-1] = lastLayerErrors;
 
         for (int i = numberOfLayers - 2; i >= 0; i--) {
-            Vector errors = layers.get(i).calculateErrors(layers.get(i + 1).getWeights(), lastLayerErrors);
+            layerErrors[i] = layers.get(i).calculateErrors(layers.get(i + 1).getWeights(), layerErrors[i+1]);
         }
 
-        for (int i = 0; i < lastLayer.getNumberOfNeurons(); i++) {
-            lastLayer.getNeurons().get(i).updateWeightsAndBias(lastLayerErrors.getElem(i));
+        for(int i = 0; i < numberOfLayers; i++){
+            for(int j = 0 ; j < layers.get(i).getNumberOfNeurons(); j++){
+                layers.get(i).getNeurons().get(j).updateWeightsAndBias(layerErrors[i].getElem(j));
+            }
         }
-
-        double totalError = 0.;
-        for (int i = 0; i < lastLayerErrors.rows; i++) {
-            totalError += lastLayerErrors.getElem(i);
-        }
-        return 0;
     }
 
     public double calculateCost() {
         Layer lastLayer = layers.get(numberOfLayers - 1);
-        Vector lastLayerErrors = new Vector(layers.get(numberOfLayers - 1).getNumberOfNeurons());
-
+        double totalError = 0.;
         for (int i = 0; i < lastLayer.getNumberOfNeurons(); i++) {
             Neuron neuron = lastLayer.getNeurons().get(i);
-            lastLayerErrors.setElem(i, Error.meanSquare(expectedValue.getElem(i), neuron.getOutput()) * neuron.activationDerivative());
+            totalError += Error.meanSquare(expectedValue.getElem(i), neuron.getOutput());
         }
-
-        double totalError = 0.;
-        for (int i = 0; i < lastLayerErrors.rows; i++) {
-            totalError += lastLayerErrors.getElem(i);
-        }
-        return currentError = totalError / lastLayerErrors.rows;
+        return currentError = totalError;
     }
 
     public double currentError;

@@ -12,10 +12,10 @@ public class Main {
         System.out.println(labels);
         List<Neuron> neurons = new ArrayList<>();
 
-        for(int i = 0 ; i < 5 ; i++){
+        for(int i = 0 ; i < 20 ; i++){
             neurons.add(new SigmoidNeuron(70));
         }
-        Layer layer1 = new Layer(5, neurons);
+        Layer layer1 = new Layer(20, neurons);
         List<Neuron> neurons2 = new ArrayList<>();
         for(int i = 0 ; i < 10 ; i++){
             neurons2.add(new SigmoidNeuron(layer1.getNumberOfNeurons()));
@@ -24,17 +24,20 @@ public class Main {
         List<Layer> layers = new ArrayList<>();
         layers.add(layer1);
         layers.add(outputLayer);
-        Network network = new Network(data.getRow(0), layers, labels.getRow(0));
+        Network network = new Network(layers);
 
-        for(Layer layer : network.getLayers()) {
-            for(Neuron neuron : layer.getNeurons()) {
-                neuron.setBias(1.0);
-                for(int i = 0; i < neuron.getWeights().getRows(); i++) {
-                    neuron.getWeights().setElem(i, 0.5);
-                }
-            }
-        }
+
+//        for(Layer layer : network.getLayers()) {
+//            for(Neuron neuron : layer.getNeurons()) {
+//                neuron.setBias(1.0);
+//                for(int i = 0; i < neuron.getWeights().getRows(); i++) {
+//                    neuron.getWeights().setElem(i, 0.5);
+//                }
+//            }
+//        }
 
         Optimiser.train(network, data, labels);
     }
+
+
 }

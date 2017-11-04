@@ -5,9 +5,10 @@ import java.util.Random;
  */
 public class Parameters {
 
-    static double upperBound = 0.1;
-    static double lowerBound = -0.1;
+    static double upperBound = 0.5;
+    static double lowerBound = -0.5;
     static double learningRate = 0.5;
+    static int epochs = 20;
 
     public static Vector initWeights(int size){
         Random r = new Random();

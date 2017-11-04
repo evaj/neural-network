@@ -44,10 +44,6 @@ public class Layer {
         }
 
         Vector layerErrors = weightedErrors.elementwiseMultiply(derivatives).transpose().getRow(0);
-
-        for(int i = 0; i < numberOfNeurons; i++){
-            neurons.get(i).updateWeightsAndBias(layerErrors.getElem(i));
-        }
         return layerErrors;
     }
 

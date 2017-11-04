@@ -216,6 +216,14 @@ public class Matrix {
         }
     }
 
+    public void visualiseSample(){
+        for(int i = 0 ; i < 70 ; i++) {
+            System.out.print((int)values[i][0]+" ");
+            if(i%7 == 6)
+                System.out.println();
+        }
+    }
+
 
     public int getRows(){
         return rows;

@@ -28,15 +28,16 @@ public class Optimiser {
     }
 
     public static void train(Network network, Matrix data, Matrix labels) {
-        int epochs = 20;
+        int epochs = Parameters.epochs;
         for (int i = 0; i < epochs; i++) {
             Matrix allData = data.joinHorizontally(labels);
-//            allData.shuffle();
-            data = allData.getFirstColumns(data.columns);
-            labels = allData.getLastColumns(labels.columns);
-            for (int j = 0; j < data.rows; j++) {
-                network.setInputs(data.getRow(j));
-                network.setExpectedValue(labels.getRow(j));
+            allData.shuffle();
+            Matrix newData = allData.getFirstColumns(data.columns);
+            Matrix newLabels = allData.getLastColumns(labels.columns);
+
+            for (int j = 0; j < newData.rows; j++) {
+                network.setInputs(newData.getRow(j));
+                network.setExpectedValue(newLabels.getRow(j));
                 network.forwardPropagation();
                 network.backwardPropagation();
             }

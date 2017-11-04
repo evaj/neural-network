@@ -9,13 +9,13 @@ abstract class Neuron {
     private double output;
 
     public Neuron() {
-        bias = 0.0;
+        bias = 0.5;
         output = 0.0;
     }
 
     public void updateWeightsAndBias(double error) {
-        bias -= Parameters.learningRate * error;
-        Vector row = MatrixOperationKt.operate(Parameters.learningRate * error, inputs.elementwiseMultiply(weights), MatrixOperationKt.getMultiply()).transpose().getRow(0);
+        bias -= (Parameters.learningRate * error);
+        Vector row = MatrixOperationKt.operate((Parameters.learningRate * error), inputs, MatrixOperationKt.getMultiply()).transpose().getRow(0);
         weights = weights.subtract(row).transpose().getRow(0);
     }
 
@@ -31,7 +31,8 @@ abstract class Neuron {
     }
 
     public double calculateOutput() {
-        return this.output = calculateActivation(net(), 0);
+        this.output = calculateActivation(net(), 0);
+        return output;
     }
 
     public abstract double activationDerivative();
